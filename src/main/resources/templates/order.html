@@ -5,5 +5,30 @@
 </head>
 <body>
 <h1>Welcome to orders!</h1>
+<div class="container">
+
+    <h3>Your Order:</h3>
+
+    <hr/>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>List</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order: ${orders}">
+
+            <td th:text="${order.shaurmaList}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<form th:action="@{/create}">
+    <button type="submit">Добавить еще одну шаурму</button>
+</form>
+<form method="post">
+    <button type="submit">Новый заказ</button>
+</form>
 </body>
 </html>
