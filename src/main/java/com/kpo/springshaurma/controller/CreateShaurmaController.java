@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @Slf4j
 @Controller
 @RequestMapping("/create")
@@ -41,20 +43,27 @@ public class CreateShaurmaController {
     }
 
     @PostMapping
-    public String createShaurma(@Valid Shaurma shaurma, Errors errors, @ModelAttribute ShaurmaOrder shaurmaOrder) {
+    public String createShaurma(@Valid Shaurma shaurma, Errors errors, Model model) {
 
         if (errors.hasErrors()) {
             return "shaurma";
         }
 
+        ShaurmaOrder order;
+        if (!model.containsAttribute("order")) {
+            order = new ShaurmaOrder();
+            model.addAttribute("order", order);
+        } else {
+            order = (ShaurmaOrder) model.getAttribute("order");
+        }
 
-        shaurmaOrder.addShaurma(shaurma);
+        Objects.requireNonNull(order).addShaurma(shaurma);
 
         if (log.isInfoEnabled()) {
             log.info("Added shaurma {}", shaurma);
         }
 
-        serviceSample.addShaurmaToOrder(shaurmaOrder);
+        serviceSample.addShaurmaToOrder(order);
 
         return "redirect:/orders/current";
     }
